@@ -43,5 +43,20 @@ class EventDetailVC: UIViewController, UIWebViewDelegate{
             activitySpinner.stopAnimating()
         }
     }
-
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        //UIWebView doesn't automatcially handle url which starts with "rwgps://"
+        //This url needs to be opened explicitly in application level
+        if navigationType == UIWebViewNavigationType.linkClicked
+        {
+            if request.url != nil
+            {
+                if request.url!.absoluteString.contains("rwgps://")
+                {
+                    UIApplication.shared.open(URL(string: request.url!.absoluteString)!, options: [:], completionHandler: nil)
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }
